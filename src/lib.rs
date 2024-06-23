@@ -1,8 +1,8 @@
 use std::pin::Pin;
 
-use async_compression::tokio::bufread::{BrotliDecoder, DeflateDecoder, ZstdDecoder, GzipDecoder};
-use base64::Engine;
+use async_compression::tokio::bufread::{BrotliDecoder, DeflateDecoder, GzipDecoder, ZstdDecoder};
 use base64::prelude::BASE64_STANDARD;
+use base64::Engine;
 use tokio::io::{AsyncRead, AsyncReadExt};
 
 pub enum DataType {
@@ -17,7 +17,7 @@ pub async fn decode(data: String, typ: DataType) -> Result<String, String> {
     if let DataType::Text = typ {
         return Ok(data);
     }
-    
+
     // decode base64
     let bin = match BASE64_STANDARD.decode(data.clone()) {
         Ok(b) => b,
@@ -30,7 +30,7 @@ pub async fn decode(data: String, typ: DataType) -> Result<String, String> {
         DataType::Deflate => Box::pin(DeflateDecoder::new(bin)),
         DataType::Gzip => Box::pin(GzipDecoder::new(bin)),
         DataType::Zstd => Box::pin(ZstdDecoder::new(bin)),
-        _ => unreachable!()
+        _ => unreachable!(),
     };
 
     let mut data: Vec<u8> = vec![];

@@ -30,26 +30,19 @@ pub async fn handler(req: Request) -> Result<Response<Body>, Error> {
     let data = hash_query.get("data").unwrap();
 
     let typ = match hash_query.get("type") {
-        None => {
-            DataType::Text
-        }
-        Some(t) => {
-            match t.as_str() {
-                "brotli" => DataType::Brotli,
-                "deflate" => DataType::Deflate,
-                "zstd" => DataType::Zstd,
-                "gzip" => DataType::Gzip,
-                "text" => DataType::Text,
-                _ => {
-                    return Ok(Response::builder()
-                        .status(StatusCode::BAD_REQUEST)
-                        .body(Body::Text(format!(
-                            "Unknown data type: {}",
-                            t
-                        )))?)
-                }
+        None => DataType::Text,
+        Some(t) => match t.as_str() {
+            "brotli" => DataType::Brotli,
+            "deflate" => DataType::Deflate,
+            "zstd" => DataType::Zstd,
+            "gzip" => DataType::Gzip,
+            "text" => DataType::Text,
+            _ => {
+                return Ok(Response::builder()
+                    .status(StatusCode::BAD_REQUEST)
+                    .body(Body::Text(format!("Unknown data type: {}", t)))?)
             }
-        }
+        },
     };
 
     let result = data2img::decode(data.to_string(), typ).await;
