@@ -4,10 +4,11 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-async-compression = { version = "0.4.11", features = ["brotli", "zstd", "deflate", "tokio"] }
+async-compression = { version = "0.4.11", features = ["brotli", "zstd", "deflate","gzip", "tokio"] }
 tokio = { version = "1", features = ["macros"] }
 url = "2.5.2"
 vercel_runtime = "1.1.4"
+base64 = "0.22.1"
 
 [target.'cfg(not(target_env = "msvc"))'.dependencies]
 tikv-jemallocator = "0.5"

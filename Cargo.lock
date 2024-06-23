@@ -205,6 +205,7 @@ name = "data2img"
 version = "0.1.0"
 dependencies = [
  "async-compression",
+ "base64 0.22.1",
  "tikv-jemallocator",
  "tokio",
  "url",

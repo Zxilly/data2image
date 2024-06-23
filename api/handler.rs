@@ -29,29 +29,26 @@ pub async fn handler(req: Request) -> Result<Response<Body>, Error> {
     }
     let data = hash_query.get("data").unwrap();
 
-    let typ: DataType = match url.path_segments() {
-        None => DataType::Text,
-        Some(p) => {
-            let parts = p.collect::<Vec<&str>>();
-            match parts.len() {
-                0 => DataType::Text,
-                1 => match parts[0] {
-                    "brotli" => DataType::Brotli,
-                    "deflate" => DataType::Deflate,
-                    "zstd" => DataType::Zstd,
-                    _ => {
-                        return Ok(Response::builder()
-                            .status(StatusCode::BAD_REQUEST)
-                            .body(Body::Text("Invalid data type".to_string()))?)
-                    }
-                },
+    let typ = match hash_query.get("type") {
+        None => {
+            DataType::Text
+        }
+        Some(t) => {
+            match t.as_str() {
+                "brotli" => DataType::Brotli,
+                "deflate" => DataType::Deflate,
+                "zstd" => DataType::Zstd,
+                "gzip" => DataType::Gzip,
+                "text" => DataType::Text,
                 _ => {
                     return Ok(Response::builder()
                         .status(StatusCode::BAD_REQUEST)
-                        .body(Body::Text("Too many path args".to_string()))?)
+                        .body(Body::Text(format!(
+                            "Unknown data type: {}",
+                            t
+                        )))?)
                 }
-            };
-            unreachable!()
+            }
         }
     };
 
