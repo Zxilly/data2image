@@ -51,6 +51,9 @@ pub async fn handler(req: Request) -> Result<Response<Body>, Error> {
         Ok(s) => Ok(Response::builder()
             .status(StatusCode::OK)
             .header("Content-Type", "image/svg+xml")
+            .header("Vercel-CDN-Cache-Control", "maxage=31536000, public, stale-while-revalidate")
+            .header("CDN-Cache-Control", "maxage=31536000, public, stale-while-revalidate")
+            .header("Cache-Control", "maxage=31536000, public, stale-while-revalidate")
             .body(Body::Text(s))?),
         Err(e) => Ok(Response::builder()
             .status(StatusCode::BAD_REQUEST)
