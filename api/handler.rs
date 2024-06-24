@@ -22,12 +22,20 @@ pub async fn handler(req: Request) -> Result<Response<Body>, Error> {
     let hash_query: HashMap<String, String> = url.query_pairs().into_owned().collect();
 
     let has_data = hash_query.contains_key("data");
-    if !has_data {
+    let has_url = hash_query.contains_key("url");
+    if !has_data && !has_url {
         return Ok(Response::builder()
             .status(StatusCode::BAD_REQUEST)
-            .body(Body::Text("data is required".to_string()))?);
+            .body(Body::Text("Missing data or url parameter".to_string()))?)
     }
-    let data = hash_query.get("data").unwrap();
+    let data = match hash_query.get("data") {
+        None => {
+            let url = hash_query.get("url").unwrap();
+            let response = reqwest::get(url).await?;
+            response.text().await?
+        }
+        Some(d) => d.to_string(),
+    };
 
     let typ = match hash_query.get("type") {
         None => DataType::Text,

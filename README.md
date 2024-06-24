@@ -14,3 +14,6 @@ A service to convert base64 to image to bypass GitHub's data uri limitation.
 |:---------:|:--------:|:------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 |   data    |   Yes    | string |                                                                           The data to convert                                                                           |
 | data_type |    No    | string | The type of the data, can be `brotli`, `deflate`, `zstd`, `gzip`, `text`.<br/> if not provided, default to `text`<br/> For `text` type should not encode data as base64 |
+|    url    |    No    | string |                                                                     The url of the data to convert.                                                                     |
+
+> Must provide either `data` or `url` argument.
