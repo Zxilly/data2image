@@ -2,6 +2,15 @@
 
 A service to convert base64 to image to bypass GitHub's data uri limitation.
 
+> Because of vercel limitations, data base64 encoded should not exceed `12k` in length.
+
+> If you want to display it on GitHub, because GitHub's camo service limits the length 
+> to about `8k` and will encode the url twice, it is recommended that the length 
+> should not exceed `6k`.
+
+> With zstd's maximum compression, svg files up to about `20k` can be displayed properly. 
+> You can use `svgo` to process the files before sending them.
+
 ## Usage
 
 ### Request
