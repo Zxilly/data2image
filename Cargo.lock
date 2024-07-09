@@ -244,7 +244,6 @@ dependencies = [
  "tikv-jemallocator",
  "tokio",
  "url",
- "url-builder",
  "vercel_runtime",
 ]
 
@@ -1574,12 +1573,6 @@ dependencies = [
  "idna",
  "percent-encoding",
 ]
-
-[[package]]
-name = "url-builder"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6c560d19163937c53680c515b82a9311c5a796691c67890b8ad579423123e194"
 
 [[package]]
 name = "valuable"

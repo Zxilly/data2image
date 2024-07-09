@@ -10,7 +10,6 @@ url = "2.5.2"
 vercel_runtime = "1.1.4"
 base64 = "0.22.1"
 reqwest = "0.12.5"
-url-builder = "0.1.1"
 
 [target.'cfg(not(target_env = "msvc"))'.dependencies]
 tikv-jemallocator = "0.5"

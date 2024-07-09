@@ -3,22 +3,16 @@ use async_compression::Level;
 use base64::prelude::BASE64_STANDARD;
 use base64::Engine;
 use tokio::io::AsyncWriteExt;
-use url_builder::URLBuilder;
+use url::Url;
 use vercel_runtime::{Body, Error, Request, Response, StatusCode};
 
 use crate::ZSTD_DICT;
 
 #[cfg(debug_assertions)]
-const PROTOCOL: &str = "http";
+const BASE: &str = "http://localhost:3000";
 
 #[cfg(not(debug_assertions))]
-const PROTOCOL: &str = "https";
-
-#[cfg(debug_assertions)]
-const HOST: &str = "localhost:3000";
-
-#[cfg(not(debug_assertions))]
-const HOST: &str = "bin2image.zxilly.dev";
+const BASE: &str = "https://bin2image.zxilly.dev";
 
 pub async fn compress(req: Request) -> Result<Response<Body>, Error> {
     if req.body().is_empty() {
@@ -52,16 +46,13 @@ pub async fn compress(req: Request) -> Result<Response<Body>, Error> {
 
     let base64 = BASE64_STANDARD.encode(compressed);
 
-    let mut ret_uri = URLBuilder::new();
-    ret_uri
-        .set_protocol(PROTOCOL)
-        .set_host(HOST)
-        .add_param("type", "zstd-dict")
-        .add_param("data", base64.as_str());
-    let ret_uri = ret_uri.build();
+    let mut url = Url::parse(BASE)?;
+    url.query_pairs_mut()
+        .append_pair("type", "zstd-dict")
+        .append_pair("data", base64.as_str());
 
     Ok(Response::builder()
         .status(StatusCode::OK)
         .header("Content-Type", "text/plain")
-        .body(Body::Text(ret_uri))?)
+        .body(Body::Text(url.to_string()))?)
 }
