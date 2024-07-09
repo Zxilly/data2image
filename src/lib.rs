@@ -1,3 +1,6 @@
+pub mod render;
+pub mod compress;
+
 use std::pin::Pin;
 
 use async_compression::tokio::bufread::{BrotliDecoder, DeflateDecoder, GzipDecoder, ZstdDecoder};
@@ -10,8 +13,11 @@ pub enum DataType {
     Deflate,
     Gzip,
     Zstd,
+    ZstdDict,
     Text,
 }
+
+pub(crate) const ZSTD_DICT: &[u8] = include_bytes!("svg.zst.dict");
 
 pub async fn decode(data: String, typ: DataType) -> Result<String, String> {
     if let DataType::Text = typ {
@@ -21,16 +27,17 @@ pub async fn decode(data: String, typ: DataType) -> Result<String, String> {
     // decode base64
     let bin = match BASE64_STANDARD.decode(data.clone()) {
         Ok(b) => b,
-        Err(e) => return Err(e.to_string()),
+        Err(e) => return Err(format!("Failed to decode base64: {}", e)),
     };
     let bin = bin.as_slice();
-
+    
     let mut decoder: Pin<Box<dyn AsyncRead>> = match typ {
         DataType::Brotli => Box::pin(BrotliDecoder::new(bin)),
         DataType::Deflate => Box::pin(DeflateDecoder::new(bin)),
         DataType::Gzip => Box::pin(GzipDecoder::new(bin)),
         DataType::Zstd => Box::pin(ZstdDecoder::new(bin)),
-        _ => unreachable!(),
+        DataType::ZstdDict => Box::pin(ZstdDecoder::with_dict(bin, ZSTD_DICT).unwrap()),
+        _ => return Err("Unknown data type".to_string()),
     };
 
     let mut data: Vec<u8> = vec![];
@@ -42,6 +49,6 @@ pub async fn decode(data: String, typ: DataType) -> Result<String, String> {
 
     match String::from_utf8(data) {
         Ok(s) => Ok(s),
-        Err(e) => Err(e.to_string()),
+        Err(e) => Err(format!("Failed to convert to utf8: {}", e)),
     }
 }
