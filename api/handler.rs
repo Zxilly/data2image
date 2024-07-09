@@ -1,5 +1,5 @@
 use reqwest::{Method, StatusCode};
-use vercel_runtime::{Body, Error, Request, Response, run};
+use vercel_runtime::{run, Body, Error, Request, Response};
 
 use data2img::{compress::compress, render::render};
 #[cfg(not(target_env = "msvc"))]
@@ -23,4 +23,3 @@ async fn handler(req: Request) -> Result<Response<Body>, Error> {
             .body(Body::Text("Method Not Allowed".to_string()))?),
     }
 }
-

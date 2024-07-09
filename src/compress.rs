@@ -1,7 +1,7 @@
-use async_compression::Level;
 use async_compression::tokio::write::ZstdEncoder;
-use base64::Engine;
+use async_compression::Level;
 use base64::prelude::BASE64_STANDARD;
+use base64::Engine;
 use tokio::io::AsyncWriteExt;
 use url_builder::URLBuilder;
 use vercel_runtime::{Body, Error, Request, Response, StatusCode};
@@ -26,12 +26,14 @@ pub async fn compress(req: Request) -> Result<Response<Body>, Error> {
             .status(StatusCode::BAD_REQUEST)
             .body(Body::Text("Missing data".to_string()))?);
     }
-    
+
     let size = req.body().len();
     if size > 1024 * 100 {
         return Ok(Response::builder()
             .status(StatusCode::PAYLOAD_TOO_LARGE)
-            .body(Body::Text("Payload too large, no more than 100KB".to_string()))?);
+            .body(Body::Text(
+                "Payload too large, no more than 100KB".to_string(),
+            ))?);
     }
 
     let data = req.body().to_vec();
@@ -41,9 +43,7 @@ pub async fn compress(req: Request) -> Result<Response<Body>, Error> {
             .body(Body::Text("Data is not utf8".to_string()))?);
     }
 
-    let mut encoder = ZstdEncoder::with_dict(
-        Vec::new(), Level::Best, ZSTD_DICT,
-    ).unwrap();
+    let mut encoder = ZstdEncoder::with_dict(Vec::new(), Level::Best, ZSTD_DICT).unwrap();
 
     encoder.write_all(&data).await?;
     encoder.shutdown().await?;
@@ -53,7 +53,8 @@ pub async fn compress(req: Request) -> Result<Response<Body>, Error> {
     let base64 = BASE64_STANDARD.encode(compressed);
 
     let mut ret_uri = URLBuilder::new();
-    ret_uri.set_protocol(PROTOCOL)
+    ret_uri
+        .set_protocol(PROTOCOL)
         .set_host(HOST)
         .add_param("type", "zstd-dict")
         .add_param("data", base64.as_str());

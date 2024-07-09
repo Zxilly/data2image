@@ -1,5 +1,5 @@
-pub mod render;
 pub mod compress;
+pub mod render;
 
 use std::pin::Pin;
 
@@ -30,7 +30,7 @@ pub async fn decode(data: String, typ: DataType) -> Result<String, String> {
         Err(e) => return Err(format!("Failed to decode base64: {}", e)),
     };
     let bin = bin.as_slice();
-    
+
     let mut decoder: Pin<Box<dyn AsyncRead>> = match typ {
         DataType::Brotli => Box::pin(BrotliDecoder::new(bin)),
         DataType::Deflate => Box::pin(DeflateDecoder::new(bin)),

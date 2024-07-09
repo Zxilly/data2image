@@ -1,8 +1,8 @@
-use std::collections::HashMap;
+use crate::DataType;
 use reqwest::StatusCode;
+use std::collections::HashMap;
 use url::Url;
 use vercel_runtime::{Body, Error, Request, Response};
-use crate::DataType;
 
 pub async fn render(req: Request) -> Result<Response<Body>, Error> {
     let url = Url::parse(&req.uri().to_string()).unwrap();
