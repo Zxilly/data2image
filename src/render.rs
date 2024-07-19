@@ -12,7 +12,7 @@ pub async fn render(req: Request) -> Result<Response<Body>, Error> {
     let has_url = hash_query.contains_key("url");
     if !has_data && !has_url {
         return Ok(Response::builder()
-            .status(StatusCode::BAD_REQUEST)
+            .status(StatusCode::TEMPORARY_REDIRECT)
             .header("Location", "https://github.com/Zxilly/data2image")
             .body("Redirecting".into())?);
     }
