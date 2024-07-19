@@ -14,8 +14,7 @@ pub async fn render(req: Request) -> Result<Response<Body>, Error> {
         return Ok(Response::builder()
             .status(StatusCode::BAD_REQUEST)
             .header("Location", "https://github.com/Zxilly/data2image")
-            .body("Redirecting".into())?)
-            
+            .body("Redirecting".into())?);
     }
     let data = match hash_query.get("data") {
         None => {
