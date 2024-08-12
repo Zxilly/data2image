@@ -17,7 +17,7 @@ pub enum DataType {
     Text,
 }
 
-pub(crate) const ZSTD_DICT: &[u8] = include_bytes!("svg.zst.dict");
+pub(crate) const ZSTD_DICT: &[u8] = include_bytes!("svg.zstd.dict");
 
 pub async fn decode(data: String, typ: DataType) -> Result<String, String> {
     if let DataType::Text = typ {
