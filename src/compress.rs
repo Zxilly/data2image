@@ -54,5 +54,9 @@ pub async fn compress(req: Request) -> Result<Response<Body>, Error> {
     Ok(Response::builder()
         .status(StatusCode::OK)
         .header("Content-Type", "text/plain")
+        .header(
+            "X-Compressed-Ratio",
+            format!("{:.2}%", (base64.len() as f64 / size as f64) * 100.0),
+        )
         .body(Body::Text(url.to_string()))?)
 }

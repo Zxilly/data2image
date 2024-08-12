@@ -31,7 +31,7 @@ pub async fn render(req: Request) -> Result<Response<Body>, Error> {
             "brotli" => DataType::Brotli,
             "deflate" => DataType::Deflate,
             "zstd" => DataType::Zstd,
-            "zstd-dict" => DataType::ZstdDict, // "zstd-dict" => "ZstdDict
+            "zstd-dict" => DataType::ZstdDict,
             "gzip" => DataType::Gzip,
             "text" => DataType::Text,
             _ => {
