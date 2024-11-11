@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 async-compression = { version = "0.4.17", features = ["brotli", "zstd", "deflate","gzip", "tokio"] }
 tokio = { version = "1", features = ["macros"] }
-url = "2.5.2"
+url = "2.5.3"
 vercel_runtime = "1.1.4"
 base64 = "0.22.1"
 reqwest = "0.12.9"
