@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-async-compression = { version = "0.4.21", features = ["brotli", "zstd", "deflate","gzip", "tokio"] }
+async-compression = { version = "0.4.22", features = ["brotli", "zstd", "deflate","gzip", "tokio"] }
 tokio = { version = "1", features = ["macros"] }
 url = "2.5.4"
 vercel_runtime = "1.1.4"
