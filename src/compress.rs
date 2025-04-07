@@ -67,7 +67,9 @@ pub async fn compress(req: Request) -> Result<Response<Body>, Error> {
     }
 
     if req.headers().contains_key("X-Optimize-Svg") {
-        data = optimize_svg(String::from_utf8(data).unwrap()).await?.into_bytes();
+        data = optimize_svg(String::from_utf8(data).unwrap())
+            .await?
+            .into_bytes();
     }
 
     let mut encoder = ZstdEncoder::with_dict(Vec::new(), Level::Best, ZSTD_DICT).unwrap();
