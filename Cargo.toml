@@ -2,6 +2,7 @@
 name = "data2img"
 version = "0.1.0"
 edition = "2021"
+build = "build.rs"
 
 [dependencies]
 async-compression = { version = "0.4.22", features = ["brotli", "zstd", "deflate","gzip", "tokio"] }
@@ -9,10 +10,13 @@ tokio = { version = "1", features = ["macros"] }
 url = "2.5.4"
 vercel_runtime = "1.1.4"
 base64 = "0.22.1"
-reqwest = "0.12.9"
+reqwest = "0.12.15"
+rquickjs = { version = "0.9.0", features = ["futures"] }
 
-[target.'cfg(not(target_env = "msvc"))'.dependencies]
-tikv-jemallocator = "0.6"
+[build-dependencies]
+reqwest = { version = "0.12.15", features = ["blocking"] }
+
+
 
 [[bin]]
 name = "handler"
