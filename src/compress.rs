@@ -21,10 +21,6 @@ async fn optimize_svg(svg: String) -> Result<String, Error> {
     let runtime = AsyncRuntime::new()?;
     let context = AsyncContext::full(&runtime).await?;
 
-    if SVGO.is_empty() {
-        panic!("SVGO is empty");
-    }
-
     let result = async_with!(context => |ctx| {
         let module = Module::declare(ctx, "svgo", SVGO).expect("failed to declare module");
         let (module, wait) = module.eval().expect("failed to eval module");
