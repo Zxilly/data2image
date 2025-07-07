@@ -37,7 +37,7 @@ pub async fn render(req: Request) -> Result<Response<Body>, Error> {
             _ => {
                 return Ok(Response::builder()
                     .status(StatusCode::BAD_REQUEST)
-                    .body(Body::Text(format!("Unknown data type: {}", t)))?)
+                    .body(Body::Text(format!("Unknown data type: {t}")))?)
             }
         },
     };

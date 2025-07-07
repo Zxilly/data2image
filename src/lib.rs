@@ -27,7 +27,7 @@ pub async fn decode(data: String, typ: DataType) -> Result<String, String> {
     // decode base64
     let bin = match BASE64_STANDARD.decode(data.clone()) {
         Ok(b) => b,
-        Err(e) => return Err(format!("Failed to decode base64: {}", e)),
+        Err(e) => return Err(format!("Failed to decode base64: {e}")),
     };
     let bin = bin.as_slice();
 
@@ -44,11 +44,11 @@ pub async fn decode(data: String, typ: DataType) -> Result<String, String> {
     let decoded = decoder.read_to_end(&mut data).await;
 
     if let Err(e) = decoded {
-        return Err(format!("Failed to decode data: {}", e));
+        return Err(format!("Failed to decode data: {e}"));
     }
 
     match String::from_utf8(data) {
         Ok(s) => Ok(s),
-        Err(e) => Err(format!("Failed to convert to utf8: {}", e)),
+        Err(e) => Err(format!("Failed to convert to utf8: {e}")),
     }
 }
