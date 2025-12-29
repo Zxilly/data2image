@@ -10,11 +10,11 @@ tokio = { version = "1", features = ["macros"] }
 url = "2.5.7"
 vercel_runtime = "1.1.6"
 base64 = "0.22.1"
-reqwest = "0.12.26"
+reqwest = "0.12.28"
 rquickjs = { version = "0.11.0", features = ["futures"] }
 
 [build-dependencies]
-reqwest = { version = "0.12.26", features = ["blocking"] }
+reqwest = { version = "0.12.28", features = ["blocking"] }
 
 
 
