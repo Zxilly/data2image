@@ -7,7 +7,7 @@ build = "build.rs"
 [dependencies]
 async-compression = { version = "0.4.37", features = ["brotli", "zstd", "deflate","gzip", "tokio"] }
 tokio = { version = "1", features = ["macros"] }
-url = "2.5.7"
+url = "2.5.8"
 vercel_runtime = "1.1.6"
 base64 = "0.22.1"
 reqwest = "0.13.1"
