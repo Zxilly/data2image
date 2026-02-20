@@ -8,7 +8,7 @@ build = "build.rs"
 async-compression = { version = "0.4.39", features = ["brotli", "zstd", "deflate","gzip", "tokio"] }
 tokio = { version = "1", features = ["macros"] }
 url = "2.5.8"
-vercel_runtime = "1.1.6"
+vercel_runtime = "2.1.1"
 base64 = "0.22.1"
 reqwest = "0.13.2"
 rquickjs = { version = "0.11.0", features = ["futures"] }
