@@ -1,19 +1,21 @@
-use reqwest::{Method, StatusCode};
-use vercel_runtime::{run, Body, Error, Request, Response};
+use reqwest::Method;
+use reqwest::StatusCode;
+use vercel_runtime::{run, service_fn, Error, Request, Response, ResponseBody};
 
 use data2img::{compress::compress, render::render};
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    run(handler).await
+    let handler_fn: fn(Request) -> _ = handler;
+    run(service_fn::<_, (Request,)>(handler_fn)).await
 }
 
-async fn handler(req: Request) -> Result<Response<Body>, Error> {
+async fn handler(req: Request) -> Result<Response<ResponseBody>, Error> {
     match *req.method() {
         Method::GET => render(req).await,
         Method::POST => compress(req).await,
         _ => Ok(Response::builder()
             .status(StatusCode::BAD_REQUEST)
-            .body(Body::Text("Method Not Allowed".to_string()))?),
+            .body(ResponseBody::from("Method Not Allowed"))?),
     }
 }

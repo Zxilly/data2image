@@ -2,10 +2,12 @@ use async_compression::tokio::write::ZstdEncoder;
 use async_compression::Level;
 use base64::prelude::BASE64_STANDARD;
 use base64::Engine;
+use http_body_util::BodyExt;
+use hyper::StatusCode;
 use rquickjs::{async_with, AsyncContext, AsyncRuntime, Function, Module, Object};
 use tokio::io::AsyncWriteExt;
 use url::Url;
-use vercel_runtime::{Body, Error, Request, Response, StatusCode};
+use vercel_runtime::{Error, Request, Response, ResponseBody};
 
 use crate::ZSTD_DICT;
 
@@ -39,27 +41,28 @@ async fn optimize_svg(svg: String) -> Result<String, Error> {
     Ok(result)
 }
 
-pub async fn compress(req: Request) -> Result<Response<Body>, Error> {
-    if req.body().is_empty() {
+pub async fn compress(mut req: Request) -> Result<Response<ResponseBody>, Error> {
+    let data = req.body_mut().collect().await?;
+    let data = data.to_bytes();
+
+    if data.is_empty() {
         return Ok(Response::builder()
             .status(StatusCode::BAD_REQUEST)
-            .body(Body::Text("Missing data".to_string()))?);
+            .body(ResponseBody::from("Missing data"))?);
     }
 
-    let size = req.body().len();
+    let size = data.len();
     if size > 1024 * 100 {
         return Ok(Response::builder()
             .status(StatusCode::PAYLOAD_TOO_LARGE)
-            .body(Body::Text(
-                "Payload too large, no more than 100KB".to_string(),
-            ))?);
+            .body(ResponseBody::from("Payload too large, no more than 100KB"))?);
     }
 
-    let mut data = req.body().to_vec();
+    let mut data = data.to_vec();
     if String::from_utf8(data.clone()).is_err() {
         return Ok(Response::builder()
             .status(StatusCode::BAD_REQUEST)
-            .body(Body::Text("Data is not utf8".to_string()))?);
+            .body(ResponseBody::from("Data is not utf8"))?);
     }
 
     if req.headers().contains_key("X-Optimize-Svg") {
@@ -89,5 +92,5 @@ pub async fn compress(req: Request) -> Result<Response<Body>, Error> {
             "X-Compressed-Ratio",
             format!("{:.2}%", (base64.len() as f64 / size as f64) * 100.0),
         )
-        .body(Body::Text(url.to_string()))?)
+        .body(ResponseBody::from(url.to_string()))?)
 }

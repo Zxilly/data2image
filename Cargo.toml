@@ -11,7 +11,9 @@ url = "2.5.8"
 vercel_runtime = "2.1.1"
 base64 = "0.22.1"
 reqwest = "0.13.2"
-rquickjs = { version = "0.11.0", features = ["futures"] }
+hyper = "1.6.0"
+http-body-util = "0.1.3"
+rquickjs = { version = "0.11.0", features = ["futures", "parallel"] }
 
 [build-dependencies]
 reqwest = { version = "0.13.2", features = ["blocking"] }
