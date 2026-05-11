@@ -256,6 +256,8 @@ version = "0.1.0"
 dependencies = [
  "async-compression",
  "base64",
+ "http-body-util",
+ "hyper",
  "reqwest",
  "rquickjs",
  "tokio",

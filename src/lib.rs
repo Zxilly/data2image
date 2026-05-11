@@ -31,7 +31,7 @@ pub async fn decode(data: String, typ: DataType) -> Result<String, String> {
     };
     let bin = bin.as_slice();
 
-    let mut decoder: Pin<Box<dyn AsyncRead>> = match typ {
+    let mut decoder: Pin<Box<dyn AsyncRead + Send>> = match typ {
         DataType::Brotli => Box::pin(BrotliDecoder::new(bin)),
         DataType::Deflate => Box::pin(DeflateDecoder::new(bin)),
         DataType::Gzip => Box::pin(GzipDecoder::new(bin)),

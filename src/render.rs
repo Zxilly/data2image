@@ -2,9 +2,9 @@ use crate::DataType;
 use reqwest::StatusCode;
 use std::collections::HashMap;
 use url::Url;
-use vercel_runtime::{Body, Error, Request, Response};
+use vercel_runtime::{Error, Request, Response, ResponseBody};
 
-pub async fn render(req: Request) -> Result<Response<Body>, Error> {
+pub async fn render(req: Request) -> Result<Response<ResponseBody>, Error> {
     let url = Url::parse(&req.uri().to_string()).unwrap();
     let hash_query: HashMap<String, String> = url.query_pairs().into_owned().collect();
 
@@ -14,7 +14,7 @@ pub async fn render(req: Request) -> Result<Response<Body>, Error> {
         return Ok(Response::builder()
             .status(StatusCode::TEMPORARY_REDIRECT)
             .header("Location", "https://github.com/Zxilly/data2image")
-            .body("Redirecting".into())?);
+            .body(ResponseBody::from("Redirecting"))?);
     }
     let data = match hash_query.get("data") {
         None => {
@@ -37,7 +37,7 @@ pub async fn render(req: Request) -> Result<Response<Body>, Error> {
             _ => {
                 return Ok(Response::builder()
                     .status(StatusCode::BAD_REQUEST)
-                    .body(Body::Text(format!("Unknown data type: {t}")))?)
+                    .body(ResponseBody::from(format!("Unknown data type: {t}")))?);
             }
         },
     };
@@ -60,9 +60,9 @@ pub async fn render(req: Request) -> Result<Response<Body>, Error> {
                 "Cache-Control",
                 "maxage=31536000, public, stale-while-revalidate",
             )
-            .body(Body::Text(s))?),
+            .body(ResponseBody::from(s))?),
         Err(e) => Ok(Response::builder()
             .status(StatusCode::BAD_REQUEST)
-            .body(Body::Text(e))?),
+            .body(ResponseBody::from(e))?),
     }
 }
