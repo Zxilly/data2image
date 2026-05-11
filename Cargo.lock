@@ -967,7 +967,7 @@ dependencies = [
  "quinn-udp",
  "rustc-hash",
  "rustls",
- "socket2 0.5.9",
+ "socket2 0.6.3",
  "thiserror 2.0.17",
  "tokio",
  "tracing",
@@ -1005,7 +1005,7 @@ dependencies = [
  "cfg_aliases",
  "libc",
  "once_cell",
- "socket2 0.5.9",
+ "socket2 0.6.3",
  "tracing",
  "windows-sys 0.59.0",
 ]
@@ -1692,9 +1692,9 @@ checksum = "b6c140620e7ffbb22c2dee59cafe6084a59b5ffc27a8859a5f0d494b5d52b6be"
 
 [[package]]
 name = "vercel_runtime"
-version = "2.1.1"
+version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "73ae39c5605f595542c909f24ad181585a850adef13cba934f8279ac4848e106"
+checksum = "49303fb373ffd4c43c023f48ec1ee860bbdea98e2b22a3fe55efa5db9fe2a80b"
 dependencies = [
  "base64",
  "http-body",
