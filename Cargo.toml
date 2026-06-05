@@ -13,7 +13,7 @@ base64 = "0.22.1"
 reqwest = "0.13.4"
 hyper = "1.10.1"
 http-body-util = "0.1.3"
-rquickjs = { version = "0.11.0", features = ["futures", "parallel"] }
+rquickjs = { version = "0.12.0", features = ["futures", "parallel"] }
 
 [build-dependencies]
 reqwest = { version = "0.13.4", features = ["blocking"] }
